@@ -1,0 +1,18 @@
+{
+  "name": "ih.dbagent-akumuli",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha **/*.test.js --exit"
+  },
+  "dependencies": {
+    "shortid": "^2.2.15"
+  },
+  "devDependencies": {
+    "expect": "^24.9.0",
+    "mocha": "^4.1.0"
+  },
+  "author": "Intra LLC",
+  "license": "MIT"
+}
