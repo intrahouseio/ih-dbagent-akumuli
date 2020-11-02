@@ -19,8 +19,7 @@ let dbagent;
 
 try {
   const workpath = path.resolve(process.cwd());
-  const config = getConfig(path.join(workpath,'config.json')); 
-
+  const config = getConfig(path.join(workpath,'config_akumuli.json')); 
   config.path_akconfig = path.join(workpath, 'ak.config');
 
   // Запуск  akumuli
@@ -29,7 +28,8 @@ try {
   // Запуск  dbagent-a
   const dbagent_path = './dbagent.js';
   if (!fs.existsSync(dbagent_path)) throw { message: 'File not found: ' + dbagent_path };
-  dbagent = fork(dbagent_path); //  TODO - передать параметры через аргументы
+
+  dbagent = fork(dbagent_path,[workpath]); // Параметр - путь к ak.config
 
   // dbconnector - объект для отправки запросов
   dbconnector.init(dbagent);

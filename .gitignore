@@ -1,0 +1,8 @@
+node_modules/
+.vscode/
+*.log
+config.json
+dbconfig.json
+ak.config
+
+
