@@ -33,7 +33,7 @@
 
 Если его нет - файл создается из ak.config.pat на этапе  startengine
 
-Если папки БД нет, она также создается на этапе  startengine командой:
+Если БД не существует, она также создается на этапе  startengine командой:
 
 ```akumuli --create --config path/file/ak.config```
 
