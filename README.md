@@ -1,6 +1,6 @@
-# ih-dbagent-ak
+# ih-dbagent-akumuli
 
-Реализация db-агента системы IH для БД Akumuli.
+Реализация db-агента системы IH для БД **Akumuli**
 
 ## dbagent
 В системе IH db-агент запускается как дочерний процесс, точка входа [dbagent.js](dbagent.js). 
