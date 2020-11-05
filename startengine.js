@@ -20,35 +20,55 @@
  * Все делается синхронно!!
  */
 
+// const util = require('util');
 const fs = require('fs');
 const path = require('path');
 const { spawn, execFileSync } = require('child_process');
 
-module.exports = function(config) {
-  checkOrMakeConfig();
+/**
+ * @param {String} workpath - путь к файлу config_akumuli.json (это конфиг агента) и ak.config
+ */
+
+module.exports = function(workpath) {
+ 
+  const configPath = path.join(workpath, 'config_akumuli.json');
+  const path_akconfig = path.join(workpath, 'ak.config'); // Всегда в рабочей папке!!
+
+  const config = getAgentConfig(); // Получить содержимое config_akumuli.json
+  checkOrMakeAkConfig();
   checkOrCreateDB();
-  return spawn(config.path_akumulid, ['--config', config.path_akconfig]);
+  return spawn(config.path_akumulid, ['--config', path_akconfig]);
 
-  function checkOrMakeConfig() {
-    if (!config.path_akumulid) throw { message: 'Expected path_akumulid in "config.json"' };
-    if (!config.path_akdb) throw { message: 'Expected path_akdb in "config.json"' };
-    if (!fs.existsSync(config.path_akumulid)) throw { message: 'File not found: ' + config.path_akumulid };
+  function getAgentConfig() {
+    if (!fs.existsSync(configPath)) throw { message: 'ERROR: startengine: File not found: ' + configPath };
+    try {
+      return JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    } catch (e) {
+      throw { message: 'ERROR: startengine: Invalid config: ' + configPath + '. ' + JSON.stringify(e) };
+    }
+  }
 
-    if (!fs.existsSync(config.path_akconfig)) makeAkConfig(config);
+  function checkOrMakeAkConfig() {
+    if (!config.path_akumulid) throw { message: 'ERROR: startengine: Expected path_akumulid in ' + configPath };
+    if (!config.path_akdb) throw { message: 'ERROR: startengine: Expected path_akdb in ' + configPath };
+    if (!fs.existsSync(config.path_akumulid))
+      throw { message: 'ERROR: startengine: File not found: ' + config.path_akumulid };
+
+    if (!fs.existsSync(path_akconfig)) makeAkConfig();
   }
 
   // создать файл ak.config из заготовки ak.config.pat
   // Файл ak.config.pat должен быть в составе пакета!
   // В заготовке заменить '${akdb}' на путь к БД: config.path_akdb
-  // Файл записать в config.path_akconfig
+  // Файл записать в path_akconfig
   function makeAkConfig() {
     const pattern = path.join(__dirname, 'ak.config.pat');
-    if (!fs.existsSync(pattern)) throw { message: 'SOFT ERROR: File not found: ' + pattern };
+    if (!fs.existsSync(pattern)) throw { message: 'ERROR: startengine: File not found: ' + pattern };
 
     const pat_str = String(fs.readFileSync(pattern, 'utf8'));
     const str = pat_str.replace(/\${akdb}/g, config.path_akdb);
 
-    fs.writeFileSync(config.path_akconfig, str, 'utf8');
+    fs.writeFileSync(path_akconfig, str, 'utf8');
   }
 
   // Проверить, что папка БД существует и содержит файл db.akumuli
@@ -62,12 +82,14 @@ module.exports = function(config) {
     } else {
       const files = fs.readdirSync(config.path_akdb);
       if (files && files.length)
-        throw { message: 'Папка БД не содержит файл db.akumuli, но содержит файлы ' + files.join(',') };
+        throw {
+          message: 'ERROR: startengine: Папка БД не содержит файл db.akumuli, но содержит файлы ' + files.join(',')
+        };
     }
 
     // Node.js execFileSync: if process has a non-zero exit code, this method will throw.
-    const stdout = execFileSync(config.path_akumulid, ['--create', '--config', config.path_akconfig]);
-   
+    const stdout = execFileSync(config.path_akumulid, ['--create', '--config', path_akconfig]);
+
     console.log('akumuli --create: \n' + stdout);
   }
 };

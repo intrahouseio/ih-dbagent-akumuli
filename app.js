@@ -19,11 +19,11 @@ let dbagent;
 
 try {
   const workpath = path.resolve(process.cwd());
-  const config = getConfig(path.join(workpath,'config_akumuli.json')); 
-  config.path_akconfig = path.join(workpath, 'ak.config');
+  // const config = getConfig(path.join(workpath,'config_akumuli.json')); 
+  // config.path_akconfig = path.join(workpath, 'ak.config');
 
-  // Запуск  akumuli
-  engine = startengine(config); // При ошибке - throw
+  // Запуск  akumuli. Передать путь к рабочей папке
+  engine = startengine(workpath); // При ошибке - throw
 
   // Запуск  dbagent-a
   const dbagent_path = './dbagent.js';
@@ -47,12 +47,14 @@ try {
   // Читать записи за последний час каждые x сек
   // По всем устройствам сразу
   // TODO - потом по каждому отдельно??
+  
   setInterval(() => {
     const ts = Date.now();
     const from = utils.dateToISOString(new Date(ts - 3600 * 1000));
     const to = utils.dateToISOString(new Date(ts));
     dbconnector.read({ from, to, select: 'value' });
-  }, 1000);
+  }, 60000);
+  
 
   // -------
   // Контроль за дочерними процессами
