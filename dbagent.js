@@ -4,7 +4,7 @@
  * Входной параметр - путь к файлу конфигурации
  */
 
-const util = require('util');
+// const util = require('util');
 
 const dbagent = require('./lib/index');
 
@@ -16,4 +16,8 @@ process.argv=[
   '/home/pi/ih-akumuli'   // аргумент - workingDir
 ]
 */
-dbagent(process, process.argv[2]);
+
+// Дать время на запуск 
+setTimeout(() => {
+  dbagent(process, process.argv[2]);
+}, 1000);

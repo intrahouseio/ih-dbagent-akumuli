@@ -1,0 +1,18 @@
+{
+  "grid": [
+    { "id": "p1", "xs": 6, "class": "main", "table": "dbagent" },
+    { "id": "p2", "xs": 6, "class": "main", "table": "dbagent" }
+  ],
+  "spacing": 10,
+  "breadcrumbs": { "tree": "dbagents" },
+
+  "p1": [
+    { "prop": "path_db", "title": "Пaпка БД", "type": "input", "default":"${vardir}/akdb/${project}/db" },
+    { "prop": "path_config", "title": "Файл конфигурации для akumuli", "type": "input", "default":"${vardir}/akdb/${project}/ak.config" },
+    { "prop": "path_log", "title": "Лог akumuli", "type": "input", "default":"${vardir}/akdb/${project}/akumuli.log" }
+  ],
+  "p2": [
+    { "prop": "portTCP", "title": "TCP порт - запись", "type": "input" },
+    { "prop": "portHTTP", "title": "HTTP порт - чтение", "type": "input" }
+  ]
+}

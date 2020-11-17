@@ -29,17 +29,17 @@ module.exports = {
 
     this.sendRequest('s' + ts, 'stats', {}, (err, result) => {
       const str = err ? util.inspect(err) : result;
-      console.log('STATS: ' + str);
+      // console.log('STATS: ' + str);
     });
   },
 
   read(query) {
-    console.log('read START query='+util.inspect(query));
+    // console.log('read START query='+util.inspect(query));
     const ts = Date.now();
 
     this.sendRequest('r' + ts, 'read', {query}, (err, result) => {
       const str = err ? util.inspect(err) : 'Records '+(result ? result.length : ' NO');
-      console.log('READ DATA: ' + str);
+      // console.log('READ DATA: ' + str);
     });
   },
 

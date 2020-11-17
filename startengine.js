@@ -38,6 +38,12 @@ module.exports = function(workpath) {
   checkOrMakeAkConfig();
   checkOrCreateDB();
   return spawn(config.path_akumulid, ['--config', path_akconfig]);
+  /*
+  return spawn(config.path_akumulid, ['--config', path_akconfig], {
+    detached: true,  // В этом случае канал к дочернему процессу не существует!
+    stdio: 'ignore'
+  });
+ */
 
   function getAgentConfig() {
     if (!fs.existsSync(configPath)) throw { message: 'ERROR: startengine: File not found: ' + configPath };
